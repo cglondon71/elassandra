@@ -14,35 +14,35 @@ Project documentation is available at [doc.elassandra.io](http://doc.elassandra.
 
 ## Benefits of Elassandra
 
-For Cassandra users, elassandra provides Elasticsearch features :
+For Cassandra users, Elassandra provides Elasticsearch features :
 * Cassandra updates are indexed in Elasticsearch.
 * Full-text and spatial search on your Cassandra data.
 * Real-time aggregation (does not require Spark or Hadoop to GROUP BY)
-* Provide search on multiple keyspaces and tables in one query.
-* Provide automatic schema creation and support nested documents using [User Defined Types](https://docs.datastax.com/en/cql/3.1/cql/cql_using/cqlUseUDT.html).
-* Provide read/write JSON REST access to Cassandra data.
-* Numerous Elasticsearch plugins and products like [Kibana](https://www.elastic.co/guide/en/kibana/current/introduction.html).
+* Provides search on multiple keyspaces and tables in one query.
+* Provides automatic schema creation and support nested documents using [User Defined Types](https://docs.datastax.com/en/cql/3.1/cql/cql_using/cqlUseUDT.html).
+* Provides read/write JSON REST access to Cassandra data.
+* Numerous Elasticsearch plugins and products such as [Kibana](https://www.elastic.co/guide/en/kibana/current/introduction.html).
 
-For Elasticsearch users, elassandra provides useful features :
-* Elassandra is masterless. Cluster state is managed through [cassandra lightweight transactions](http://www.datastax.com/dev/blog/lightweight-transactions-in-cassandra-2-0).
-* Elassandra is a sharded multi-master database, where Elasticsearch is sharded master-slave. Thus, Elassandra has no Single Point Of Write, helping to achieve high availability.
-* Elassandra inherits Cassandra data repair mechanisms (hinted handoff, read repair and nodetool repair) providing support for **cross datacenter replication**.
+For Elasticsearch users, Elassandra provides useful features :
+* Elassandra is masterless. Cluster state is managed via [cassandra lightweight transactions](http://www.datastax.com/dev/blog/lightweight-transactions-in-cassandra-2-0).
+* Elassandra is a sharded multi-master database, where Elasticsearch is the sharded master-slave. Hence, Elassandra has no Single Point Of Write, helping to achieve??????????? high availability.
+* Elassandra inherits of the Cassandra data repair mechanisms (hinted handoff, read repair and nodetool repair) providing support for **cross datacenter replication**.
 * When adding a node to an Elassandra cluster, only data pulled from existing nodes are re-indexed in Elasticsearch.
-* Cassandra could be your unique datastore for indexed and non-indexed data. It's easier to manage and secure. Source documents are now stored in Cassandra, reducing disk space if you need a NoSQL database and Elasticsearch.
-* Write operations are not restricted to one primary shard, but distributed across all Cassandra nodes in a virtual datacenter. The number of shards does not limit your write throughput. Adding elassandra nodes increases both read and write throughput.
-* Elasticsearch indices can be replicated among many Cassandra datacenters, allowing write to the closest datacenter and search globally.
-* The [cassandra driver](http://www.planetcassandra.org/client-drivers-tools/) is Datacenter and Token aware, providing automatic load-balancing and failover.
+* Cassandra could be your unique datastore for indexed and non-indexed data. It's easier to manage and pretty secure. Source documents are now stored in Cassandra, hence reducing disk space if you need a NoSQL database and Elasticsearch.
+* Write operations are not restricted to one primary shard, but distributed across all Cassandra nodes in a virtual datacenter. The number of shards does not limit your write throughput. Adding Elassandra nodes increases both read and write throughput.
+* Elasticsearch indices can be replicated among many Cassandra datacentres, allowing write to the closest datacentre and gloval search.
+* The [cassandra driver](http://www.planetcassandra.org/client-drivers-tools/) is Datacentre and Token aware, providing automatic load-balancing and failover.
 
 ## Quick start
 
 #### Elasticsearch 6.x changes
 
-* Elasticsearch now supports only one document type per index backed by one Cassandra table. Unless you specify an elasticsearch type name in your mapping, data is stored in a cassandra table named **"_doc"**. If you want to search many cassandra tables, you now need to create and search many indices.
-* Elasticsearch 6.x manages shard consistency through several metadata fields (_primary_term, _seq_no, _version) that are not used in elassandra because replication is fully managed by cassandra.
+* Elasticsearch now, only, supports, one document type per index backed by one Cassandra table. Unless you specify an Elasticsearch type name in your mapping, data is stored in a Cassandra table named **"_doc"**. If you want to search many cassandra tables, you now need to create and search many indices.
+* Elasticsearch 6.x manages shard consistency via several metadata fields (_primary_term, _seq_no, _version) that are not used in Elassandra because the replication process is fully managed by Cassandra.
 
 #### Requirements
 
-Ensure Java 8 is installed and `JAVA_HOME` points to the correct location.
+Ensure Java 8 is installed and `JAVA_HOME` points to the right location.
 
 #### Installation
 
@@ -64,7 +64,7 @@ curl -XPUT 'http://localhost:9200/twitter/_doc/1?pretty' -H 'Content-Type: appli
 }'
 ```
 
-Then look-up in Cassandra:
+Then look into Cassandra:
 ```bash
 bin/cqlsh -c "SELECT * from twitter.\"_doc\""
 ```
@@ -81,7 +81,7 @@ Then search for it with the Elasticsearch API:
 curl "localhost:9200/twitter/_search?q=user:Jimmy&pretty"
 ```
 
-And here is a sample response :
+Below is a sample answer :
 ```JSON
 {
   "took" : 1,
