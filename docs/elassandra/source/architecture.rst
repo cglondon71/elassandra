@@ -1,9 +1,9 @@
 Architecture
 ============
 
-Elassandra tightly integrates elasticsearch within cassandra as a secondary index, allowing near-realtime search with all existing elasticsearch APIs, plugins and tools like Kibana.
+Elassandra closely integrates Elasticsearch within Cassandra as a secondary index, allowing near-realtime search with all existing elasticsearch APIs, plugins and tools such as Kibana.
 
-When you index a document, the JSON document is stored as a row in a cassandra table and synchronously indexed in elasticsearch.
+When you index a document, the JSON document is stored as a row in a Cassandra table and synchronously indexed in Elasticsearch.
 
 .. image:: images/elassandra1.jpg
 
@@ -15,20 +15,20 @@ Concepts Mapping
     +------------------------+--------------------+--------------------------------------------------------------------------+
     | Elasticsearch          | Cassandra          | Description                                                              |
     +========================+====================+==========================================================================+
-    | Cluster                | Virtual Datacenter | All nodes of a datacenter forms an Elasticsearch cluster                 |
+    | Cluster                | Virtual Datacenter | All nodes of a datacentre forms an Elasticsearch cluster                 |
     +------------------------+--------------------+--------------------------------------------------------------------------+
-    | Shard                  | Node               | Each cassandra node is an elasticsearch shard for each indexed keyspace  |
+    | Shard                  | Node               | Each Cassandra node is an Elasticsearch shard for each indexed keyspace  |
     +------------------------+--------------------+--------------------------------------------------------------------------+
-    | Index                  | Keyspace           | An elasticsearch index is backed by a keyspace                           |
+    | Index                  | Keyspace           | An elasticsearch index is backed or backed up?by a keyspace                           |
     +------------------------+--------------------+--------------------------------------------------------------------------+
-    | Type                   | Table              | Each elasticsearch document type is backed by a cassandra table.         |
-    |                        |                    | Elasticsearch 6+ support only one document type, named "_doc" by default.|
+    | Type                   | Table              | Each elasticsearch document type is backed by a Cassandra table.         |
+    |                        |                    | Elasticsearch 6+ only supports one document type, named "_doc" by default.|
     +------------------------+--------------------+--------------------------------------------------------------------------+
-    | Document               | Row                | An elasticsearch document is backed by a cassandra row                   |
+    | Document               | Row                | An elasticsearch document is backed up? by a Cassandra row                   |
     +------------------------+--------------------+--------------------------------------------------------------------------+
-    | Field                  | Cell               | Each indexed field is backed by a cassandra cell (row x column)          |
+    | Field                  | Cell               | Each indexed field is backed by a Cassandra cell (row x column)          |
     +------------------------+--------------------+--------------------------------------------------------------------------+
-    | Object or nested field | User Defined Type  | Automatically create User Defined Type to store elasticsearch object     |
+    | Object or nested field | User Defined Type  | Automatically create a User Defined Type to store Elasticsearch object     |
     +------------------------+--------------------+--------------------------------------------------------------------------+
 
 From an Elasticsearch perspective :
@@ -36,28 +36,28 @@ From an Elasticsearch perspective :
 * An Elasticsearch cluster is a Cassandra virtual datacenter.
 * Every Elassandra node is a master primary data node.
 * Each node only index local data and acts as a primary local shard.
-* Elasticsearch data is not more stored in lucene indices, but in cassandra tables.
+* Elasticsearch data is no longer stored in Lucene indices, but in Cassandra tables.
 
-  * An Elasticsearch index is mapped to a cassandra keyspace,
-  * Elasticsearch document type is mapped to a cassandra table. Elasticsearch 6+ support only one document type, named "_doc" by default.
-  * Elasticsearch document *_id* is a string representation of the cassandra primary key.
+  * An Elasticsearch index is mapped to a Cassandra keyspace,
+  * Elasticsearch document type is mapped to a Cassandra table. Elasticsearch 6+ only supports one document type, named "_doc" by default.
+  * Elasticsearch document *_id* is a string representation of the Cassandra primary key.
 
-* Elasticsearch discovery now rely on the cassandra `gossip protocol <https://wiki.apache.org/cassandra/ArchitectureGossip>`_. When a node join or leave the cluster, or when a schema change occurs, each nodes update nodes status and its local routing table.
-* Elasticsearch `gateway <https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-gateway.html>`_ now store metadata in a cassandra table and in the cassandra schema. Metadata updates are played sequentially through a `cassandra lightweight transaction <http://docs.datastax.com/en/cql/3.1/cql/cql_using/use_ltweight_transaction_t.html>`_. Metadata UUID is the cassandra hostId of the last modifier node.
+* Elasticsearch discovery now relies on the cassandra `gossip protocol <https://wiki.apache.org/cassandra/ArchitectureGossip>`_. When a node joins or leaves the cluster, or when a schema change occurs, each node updates the nodes status and its local routing table.
+* Elasticsearch `gateway <https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-gateway.html>`_ now stores metadata in a Cassandra table and in the Cassandra schema. Metadata updates are played sequentially through a `Cassandra lightweight transaction <http://docs.datastax.com/en/cql/3.1/cql/cql_using/use_ltweight_transaction_t.html>`_. Metadata UUID is the Cassandra hostId of the last modifier node.
 * Elasticsearch REST and java API remain unchanged.
-* Logging is now based on `logback <http://logback.qos.ch/>`_ as cassandra.
+* Logging is now based on `logback <http://logback.qos.ch/>`_ such as in Cassandra.
 
 From a Cassandra perspective :
 
 * Columns with an ElasticSecondaryIndex are indexed in Elasticsearch.
-* By default, Elasticsearch document fields are multivalued, so every field is backed by a list. Single valued document field can be mapped to a basic types by setting 'cql_collection: singleton' in our type mapping. See `Elasticsearch document mapping <Elasticsearch-document-mapping>`_ for details.
-* Nested documents are stored using cassandra `User Defined Type <http://docs.datastax.com/en/cql/3.1/cql/cql_using/cqlUseUDT.html>`_ or `map <http://docs.datastax.com/en/cql/3.0/cql/cql_using/use_map_t.html>`_.
+* By default, Elasticsearch document fields are multivalued, so every field is backed up???? by a list. Single valued document field can be mapped to a basic type by setting 'cql_collection: singleton' in our type mapping. See `Elasticsearch document mapping <Elasticsearch-document-mapping>`_ for further details.
+* Nested documents are stored using Cassandra `User Defined Type <http://docs.datastax.com/en/cql/3.1/cql/cql_using/cqlUseUDT.html>`_ or `map <http://docs.datastax.com/en/cql/3.0/cql/cql_using/use_map_t.html>`_.
 * Elasticsearch provides a JSON-REST API to cassandra, see `Elasticsearch API <https://www.elastic.co/guide/en/elasticsearch/reference/1.5/index.html>`_.
 
 Durability
 ----------
 
-All writes to a cassandra node are recorded both in a memory table and in a commit log. When a memtable flush occurs, it flushes the elasticsearch secondary index on disk.
+All writes to a Cassandra node are recorded both in a memory table and in a commit log. When a memtable flush occurs, it flushes the elasticsearch secondary index on disk.
 When restarting after a failure, cassandra replays commitlogs and re-indexes elasticsearch documents that were no flushed by elasticsearch.
 This the reason why `elasticsearch translog <https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-translog.html#index-modules-translog>`_ is disabled in elassandra.
 
