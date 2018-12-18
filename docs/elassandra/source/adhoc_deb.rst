@@ -11,7 +11,7 @@ Install it with dpkg tool::
 
 
 
-To start elassandra, just run::
+To start Elassandra, by running::
 
   sudo systemctl start cassandra
 
